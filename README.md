@@ -21,6 +21,218 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Prerequisites
+
+- [Docker](https://www.docker.com/get-started)
+
+## Getting Started
+
+1. **Clone this repository:**
+
+   ```bash
+   git clone https://github.com/your-username/luckytrip.git
+2. **Create a .env file:**
+
+   ```bash
+   cp .env.example .env
+   docker-compose build
+   docker-compose up
+   
+   -------using makefile------
+   
+   make up
+   make composer-update
+   make data
+
+## Seeders
+By using 
+```make data ``` 
+it will insert data to your local mysql database. However, running
+```php artisan db:seed ``` also works.
+
+## testing
+
+Run ```vendor/bin/phpunit``` to test Apis
+
+
+## Endpoints
+
+Here are the available endpoints for interacting with the Airport API:
+
+#### 1. Create a New Airport
+- **POST /api/airports**
+    - **Description**: Create a new airport with translations.
+    - **cURL Example**:
+```bash
+  curl --location --request POST 'http://localhost:9002/api/airports' \
+--header 'Accept-Language: en' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "iata_code" : "ABC",
+    "latitude" : "38.8951",
+    "longitude" : "-77.0364",
+    "translations": [
+        {
+            "language_code": "en",
+            "name": "test Airport", 
+             "description" : "its description",
+            "terms_and_conditions" : "its terms"
+        },
+        {
+            "language_code": "fr",
+            "name": "gsss de Heathrow",
+            "description" : "its description",
+            "terms_and_conditions" : "its terms"
+        },
+        {
+            "language_code": "de",
+            "name": "dsad Heathrow",
+            "description" : "its description",
+            "terms_and_conditions" : "its terms"
+        }
+    ]
+}'
+```
+
+#### 2. Get Airports
+
+- **GET /api/airports**
+    - **Description**: Fetch airports based on name, latitude, and longitude.
+    - **cURL Example**:
+```bash
+curl --location --request GET 'http://localhost:9002/api/airports?name=Heathrow&latitude=51.470020&longitude=-0.454295&order=asc' \
+--header 'Accept-Language: en' \
+--header 'Accept: application/json'
+```
+    - **Sample Response**:
+      ```json
+      [
+          {
+              "iata_code": "LHR",
+              "latitude": 51.470020,
+              "longitude": -0.454295,
+              "translations": [
+                  {
+                      "language_code": "en",
+                      "name": "Heathrow Airport",
+                      "description": "The primary international airport serving London.",
+                      "terms_and_conditions": "Terms and conditions for Heathrow Airport."
+                  }
+              }
+          }
+      ]
+      ```
+
+#### 3. Update an Existing Airport
+
+- **PUT /api/airports/{airportId}**
+    - **Description**: Update an existing airport by providing its ID.
+    - **cURL Example**:
+```bash
+curl --location --request PUT 'http://localhost:9002/api/airports/4' \
+--header 'Accept-Language: en' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "iata_code": "LHQ",
+    "latitude": 51.470020,
+    "longitude": -0.454295,
+    "description": "Updated airport description",
+    "terms_and_conditions": "Updated terms and conditions",
+    "translations": [
+        {
+            "language_code": "en",
+            "name": "qqqqqqq"
+        },
+        {
+            "language_code": "fr",
+            "name": "bbbbbbb"
+        }
+    ]
+}'
+```
+    - **Sample Response**:
+      ```json
+      {
+          "message": "Airport updated successfully"
+      }
+      ```
+
+#### 4. Delete an Existing Airport
+
+- **DELETE /api/airports/{airportId}**
+    - **Description**: Delete an existing airport by providing its ID.
+    - **cURL Example**:
+```bash
+curl --location --request DELETE 'http://localhost:9002/api/airports/4' \
+--header 'Accept-Language: en' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "iata_code": "LHQ",
+    "latitude": 51.470020,
+    "longitude": -0.454295,
+    "description": "Updated airport description",
+    "terms_and_conditions": "Updated terms and conditions",
+    "translations": [
+        {
+            "language_code": "en",
+            "name": "Updated English Name"
+        },
+        {
+            "language_code": "fr",
+            "name": "Nom mis à jour en français"
+        }
+    ]
+}'
+```
+    - **Sample Response**:
+      ```json
+      {
+          "message": "Airport deleted successfully"
+      }
+      ```
+
+#### 5. Get Airport by ID
+
+- **GET /api/airports/{airportId}**
+    - **Description**: Retrieve detailed information about an airport by providing its ID.
+    - **cURL Example**:
+```bash
+curl --location --request GET 'http://localhost:9002/api/airports/1' \
+--header 'Accept-Language: en' \
+--header 'Accept: application/json'
+```
+    - **Sample Response**:
+      ```json
+      {
+          "id": 1,
+          "iata_code": "JFK",
+          "latitude": 40.6413,
+          "longitude": -73.7781,
+          "translations": [
+              {
+                  "id": 1,
+                  "airport_id": 1,
+                  "language_code": "en",
+                  "name": "John F. Kennedy International Airport",
+                  "description": "The primary international airport serving New York City.",
+                  "terms_and_conditions": "Terms and conditions for JFK Airport."
+              },
+              {
+                  "id": 2,
+                  "airport_id": 1,
+                  "language_code": "fr",
+                  "name": "Aéroport international John F. Kennedy",
+                  "description": "Le principal aéroport international desservant New York.",
+                  "terms_and_conditions": "Conditions générales pour l'aéroport JFK."
+              }
+          ]
+      }
+      ```
+
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
