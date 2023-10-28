@@ -1,0 +1,26 @@
+services:
+
+  luckytrip:
+    container_name: luckytrip
+    build: .
+    volumes:
+      - ./luckytrip:/var/www/html
+    ports:
+      - 9002:80
+
+  mysql_db_luckytrip:
+    image: mysql:latest
+    volumes:
+      - "./.data/db:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: luckytrip
+    ports:
+      - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 9003:80
+    environment:
+      - PMA_ARBITRARY=1
